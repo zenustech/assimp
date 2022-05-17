@@ -2009,7 +2009,14 @@ namespace Assimp {
             TrySetTextureProperties(out_mat, textures, "Maya|emissionColor|file", aiTextureType_EMISSION_COLOR, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|metalness|file", aiTextureType_METALNESS, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|diffuseRoughness|file", aiTextureType_DIFFUSE_ROUGHNESS, mesh);
-            
+
+            // PBR
+            TrySetTextureProperties(out_mat, textures, "Maya|baseColor", aiTextureType_BASE_COLOR, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|normalCamera", aiTextureType_NORMAL_CAMERA, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|emissionColor", aiTextureType_EMISSION_COLOR, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|metalness", aiTextureType_METALNESS, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|diffuseRoughness", aiTextureType_DIFFUSE_ROUGHNESS, mesh);
+
             // Maya stingray
             TrySetTextureProperties(out_mat, textures, "Maya|TEX_color_map|file", aiTextureType_BASE_COLOR, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|TEX_normal_map|file", aiTextureType_NORMAL_CAMERA, mesh);
