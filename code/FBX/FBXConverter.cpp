@@ -2018,6 +2018,7 @@ namespace Assimp {
             TrySetTextureProperties(out_mat, textures, "Maya|diffuseRoughness", aiTextureType_DIFFUSE_ROUGHNESS, mesh);
             // TODO aiTextureType_SPECULAR_ROUGHNESS ?
             TrySetTextureProperties(out_mat, textures, "Maya|specularRoughness", aiTextureType_DIFFUSE_ROUGHNESS, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|transmissionColor", aiTextureType_OPACITY, mesh);
 
             // Maya stingray
             TrySetTextureProperties(out_mat, textures, "Maya|TEX_color_map|file", aiTextureType_BASE_COLOR, mesh);
