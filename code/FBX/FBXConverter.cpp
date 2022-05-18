@@ -2016,6 +2016,8 @@ namespace Assimp {
             TrySetTextureProperties(out_mat, textures, "Maya|emissionColor", aiTextureType_EMISSION_COLOR, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|metalness", aiTextureType_METALNESS, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|diffuseRoughness", aiTextureType_DIFFUSE_ROUGHNESS, mesh);
+            // TODO aiTextureType_SPECULAR_ROUGHNESS ?
+            TrySetTextureProperties(out_mat, textures, "Maya|specularRoughness", aiTextureType_DIFFUSE_ROUGHNESS, mesh);
 
             // Maya stingray
             TrySetTextureProperties(out_mat, textures, "Maya|TEX_color_map|file", aiTextureType_BASE_COLOR, mesh);
@@ -2041,6 +2043,30 @@ namespace Assimp {
             TrySetTextureProperties(out_mat, layeredTextures, "ShininessExponent", aiTextureType_SHININESS, mesh);
 			TrySetTextureProperties( out_mat, layeredTextures, "EmissiveFactor", aiTextureType_EMISSIVE, mesh );
 			TrySetTextureProperties( out_mat, layeredTextures, "TransparencyFactor", aiTextureType_OPACITY, mesh );
+        }
+
+        aiColor3D FBXConverter::GetColorPropertyFactoredMaya(const PropertyTable& props, const std::string& colorName,
+            const std::string& factorName, bool& result, bool useTemplate)
+        {
+            result = true;
+
+            bool ok;
+            aiVector3D BaseColor = PropertyGet<aiVector3D>(props, colorName, ok, useTemplate);
+            if (!ok) {
+                result = false;
+                return aiColor3D(0.0f, 0.0f, 0.0f);
+            }
+
+            if (factorName.empty()) {
+                return aiColor3D(BaseColor.x, BaseColor.y, BaseColor.z);
+            }
+
+            float factor = PropertyGet<float>(props, factorName, ok, useTemplate);
+            if (ok) {
+                ASSIMP_LOG_INFO_F("----- Factoring for -> ", colorName);
+                BaseColor *= factor;
+            }
+            return aiColor3D(BaseColor.x, BaseColor.y, BaseColor.z);
         }
 
         aiColor3D FBXConverter::GetColorPropertyFactored(const PropertyTable& props, const std::string& colorName,
@@ -2074,6 +2100,13 @@ namespace Assimp {
             return GetColorPropertyFactored(props, baseName + "Color", baseName + "Factor", result, true);
         }
 
+        aiColor3D FBXConverter::GetColorPropertyFromMaterialMaya(const PropertyTable& props, const std::string& baseName,
+                                                             bool& result)
+        {
+          FBXImporter::LogWarn(">>>>> Color Name " + baseName + "Color" + " Factor Name " + baseName);
+          return GetColorPropertyFactoredMaya(props, baseName + "Color", baseName, result, true);
+        }
+
         aiColor3D FBXConverter::GetColorProperty(const PropertyTable& props, const std::string& colorName,
             bool& result, bool useTemplate)
         {
@@ -2098,6 +2131,93 @@ namespace Assimp {
             // Blender's FBX import and export mostly ignore this legacy system,
             // and as we only support recent versions of FBX anyway, we can do the same.
             bool ok;
+            /*
+             * 	P: "Maya", "Compound", "", ""
+                P: "Maya|TypeId", "int", "Integer", "",1138001
+                P: "Maya|outAlpha", "float", "", "",0
+                P: "Maya|normalCamera", "Vector3D", "Vector", "",0,0,1
+                P: "Maya|aiEnableMatte", "bool", "", "",0
+                P: "Maya|aiMatteColor", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|aiMatteColorA", "float", "", "",0
+                P: "Maya|base", "float", "", "",0.868852
+              * P: "Maya|baseColor", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|diffuseRoughness", "float", "", "",0.836066
+                P: "Maya|specular", "float", "", "",0.45082
+              * P: "Maya|specularColor", "Vector3D", "Vector", "",0,1,0
+                P: "Maya|specularRoughness", "float", "", "",1
+                P: "Maya|specularIOR", "float", "", "",1.264463
+                P: "Maya|specularAnisotropy", "float", "", "",0.491803
+                P: "Maya|specularRotation", "float", "", "",0.758197
+                P: "Maya|metalness", "float", "", "",1
+                P: "Maya|transmission", "float", "", "",0.692623
+              * P: "Maya|transmissionColor", "Vector3D", "Vector", "",1,0,0
+                P: "Maya|transmissionDepth", "float", "", "",43.442623
+                P: "Maya|transmissionScatter", "Vector3D", "Vector", "",0,0,1
+                P: "Maya|transmissionScatterAnisotropy", "float", "", "",-0.516393
+                P: "Maya|transmissionDispersion", "float", "", "",37.603306
+                P: "Maya|transmissionExtraRoughness", "float", "", "",0.172131
+                P: "Maya|transmitAovs", "bool", "", "",0
+                P: "Maya|subsurface", "float", "", "",0.360656
+              * P: "Maya|subsurfaceColor", "Vector3D", "Vector", "",0,0,1
+                P: "Maya|subsurfaceRadius", "Vector3D", "Vector", "",1,0,1
+                P: "Maya|subsurfaceScale", "float", "", "",3.196721
+                P: "Maya|subsurfaceAnisotropy", "float", "", "",0.606557
+                P: "Maya|subsurfaceType", "enum", "", "",1
+                P: "Maya|sheen", "float", "", "",0
+              * P: "Maya|sheenColor", "Vector3D", "Vector", "",1,1,1
+                P: "Maya|sheenRoughness", "float", "", "",0.3
+                P: "Maya|thinWalled", "bool", "", "",0
+                P: "Maya|tangent", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|coat", "float", "", "",0.606557
+              * P: "Maya|coatColor", "Vector3D", "Vector", "",0,1,1
+                P: "Maya|coatRoughness", "float", "", "",0.348361
+                P: "Maya|coatIOR", "float", "", "",2.830579
+                P: "Maya|coatAnisotropy", "float", "", "",0.79918
+                P: "Maya|coatRotation", "float", "", "",0.25
+                P: "Maya|coatNormal", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|thinFilmThickness", "float", "", "",909.83606
+                P: "Maya|thinFilmIOR", "float", "", "",0.860656
+                P: "Maya|emission", "float", "", "",0.487705
+              * P: "Maya|emissionColor", "Vector3D", "Vector", "",1,1,0
+                P: "Maya|opacity", "Vector3D", "Vector", "",1,1,1
+                P: "Maya|caustics", "bool", "", "",0
+                P: "Maya|internalReflections", "bool", "", "",1
+                P: "Maya|exitToBackground", "bool", "", "",0
+                P: "Maya|indirectDiffuse", "float", "", "",1
+                P: "Maya|indirectSpecular", "float", "", "",1
+                P: "Maya|dielectricPriority", "int", "Integer", "",-5
+                P: "Maya|aovId1", "KString", "", "", ""
+                P: "Maya|id1", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|aovId2", "KString", "", "", ""
+                P: "Maya|id2", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|aovId3", "KString", "", "", ""
+                P: "Maya|id3", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|aovId4", "KString", "", "", ""
+                P: "Maya|id4", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|aovId5", "KString", "", "", ""
+                P: "Maya|id5", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|aovId6", "KString", "", "", ""
+                P: "Maya|id6", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|aovId7", "KString", "", "", ""
+                P: "Maya|id7", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|aovId8", "KString", "", "", ""
+                P: "Maya|id8", "Vector3D", "Vector", "",0,0,0
+                P: "Maya|normalCameraUsedAs", "int", "Integer", "",1
+                P: "Maya|normalCameraFactor", "double", "Number", "",1
+             *
+             */
+            // ---------------------
+            GET_AI_MAT_PROP_COLOR3("Maya|base", base, "$ai.base",0,0)
+            GET_AI_MAT_PROP_COLOR3("Maya|specular", specular, "$ai.specular",0,0)
+            GET_AI_MAT_PROP_COLOR3("Maya|transmission", transmission, "$ai.transmission",0,0)
+            GET_AI_MAT_PROP_COLOR3("Maya|subsurface", subsurface, "$ai.subsurface",0,0)
+            GET_AI_MAT_PROP_COLOR3("Maya|sheen", sheen, "$ai.sheen",0,0)
+            GET_AI_MAT_PROP_COLOR3("Maya|coat", coat, "$ai.coat",0,0)
+            GET_AI_MAT_PROP_COLOR3("Maya|emission", emission, "$ai.emission",0,0)
+
+            GET_AI_MAT_PROP_FLOAT("Maya|normalCameraFactor", normalCameraFactor, "$ai.normalCameraFactor",0,0)
+
+            // ---------------------
 
             const aiColor3D& Diffuse = GetColorPropertyFromMaterial(props, "Diffuse", ok);
             if (ok) {
@@ -2201,6 +2321,7 @@ void FBXConverter::SetShadingPropertiesRaw(aiMaterial* out_mat, const PropertyTa
     for (const DirectPropertyMap::value_type& prop : props.GetUnparsedProperties()) {
 
         std::string name = prefix + prop.first;
+        //ASSIMP_LOG_INFO_F("///// ", prop.first);
 
         if (const TypedProperty<aiVector3D>* interpreted = prop.second->As<TypedProperty<aiVector3D> >())
         {

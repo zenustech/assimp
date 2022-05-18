@@ -62,6 +62,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <unordered_map>
 #include <unordered_set>
 
+#define GET_AI_MAT_PROP_COLOR3(NAME, prop, key, type, index)             \
+    const aiColor3D& prop = GetColorPropertyFromMaterialMaya(props, NAME, ok);   \
+    ASSIMP_LOG_INFO_F("----- AiMatPropColor3Result -> ", NAME, " ", prop.r, " ", prop.r, " ", prop.g, " ", ok); \
+    if (ok) {   \
+        out_mat->AddProperty(&prop, 1, key, type, index); \
+    }
+
+#define GET_AI_MAT_PROP_FLOAT(NAME, prop, key, type, index) \
+    float prop = PropertyGet<float>(props, NAME, ok, true); \
+    ASSIMP_LOG_INFO_F("----- AiMatPropFloatResult -> ", NAME, " ", prop, " ", ok); \
+    if (ok) { \
+        out_mat->AddProperty(&prop, 1, key, type, index); \
+    }
+
 struct aiScene;
 struct aiNode;
 struct aiMaterial;
@@ -267,8 +281,12 @@ private:
     // ------------------------------------------------------------------------------------------------
     aiColor3D GetColorPropertyFromMaterial(const PropertyTable& props, const std::string& baseName,
         bool& result);
+    aiColor3D GetColorPropertyFromMaterialMaya(const PropertyTable& props, const std::string& baseName,
+                                         bool& result);
     aiColor3D GetColorPropertyFactored(const PropertyTable& props, const std::string& colorName,
         const std::string& factorName, bool& result, bool useTemplate = true);
+    aiColor3D GetColorPropertyFactoredMaya(const PropertyTable& props, const std::string& colorName,
+                                           const std::string& factorName, bool& result, bool useTemplate = true);
     aiColor3D GetColorProperty(const PropertyTable& props, const std::string& colorName,
         bool& result, bool useTemplate = true);
 
