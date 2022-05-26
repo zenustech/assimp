@@ -431,6 +431,9 @@ namespace Assimp {
             out_camera->mHorizontalFOV = AI_DEG_TO_RAD(cam.FieldOfView());
             out_camera->mClipPlaneNear = cam.NearPlane();
             out_camera->mClipPlaneFar = cam.FarPlane();
+
+            out_camera->mFocalLength = cam.FocalLength();
+            out_camera->mInterestPosition = cam.InterestPosition();
         }
 
         void FBXConverter::GetUniqueName(const std::string &name, std::string &uniqueName)

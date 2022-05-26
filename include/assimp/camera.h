@@ -167,6 +167,13 @@ struct aiCamera
      */
     float mAspect;
 
+    /**
+     * CustomProp
+     */
+
+    float mFocalLength;
+    aiVector3D mInterestPosition;
+
 #ifdef __cplusplus
 
     aiCamera() AI_NO_EXCEPT
