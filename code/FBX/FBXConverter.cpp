@@ -419,6 +419,9 @@ namespace Assimp {
 
             out_camera->mAspect = cam.AspectWidth() / cam.AspectHeight();
 
+            out_camera->mFilmWidth = cam.FilmWidth();
+            out_camera->mFilmHeight = cam.FilmHeight();
+
             out_camera->mPosition = aiVector3D(0.0f);
             out_camera->mLookAt = aiVector3D(1.0f, 0.0f, 0.0f);
             out_camera->mUp = aiVector3D(0.0f, 1.0f, 0.0f);
