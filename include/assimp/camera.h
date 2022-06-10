@@ -174,7 +174,7 @@ struct aiCamera
     float mFocalLength;
     float mFilmWidth;
     float mFilmHeight;
-    aiVector3D mInterestPosition;
+    C_STRUCT aiVector3D mInterestPosition;
 
 #ifdef __cplusplus
 
