@@ -2223,6 +2223,7 @@ namespace Assimp {
             GET_AI_MAT_PROP_COLOR3("Maya|emission", emission, "$ai.emission",0,0)
 
             GET_AI_MAT_PROP_FLOAT("Maya|normalCameraFactor", normalCameraFactor, "$ai.normalCameraFactor",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|metalness", metalness, "$ai.metalness",0,0)
 
             // ---------------------
 
