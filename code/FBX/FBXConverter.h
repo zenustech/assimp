@@ -62,9 +62,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <unordered_map>
 #include <unordered_set>
 
+// FIXME Must using printf can get correct result
 #define GET_AI_MAT_PROP_COLOR3(NAME, prop, key, type, index)             \
     const aiColor3D& prop = GetColorPropertyFromMaterialMaya(props, NAME, ok); \
-    //printf("PropColor: %s %.2f %.2f %.2f %d\n",NAME, prop.r,prop.g,prop.b, ok);                              \
+    printf("PropColor: %s %.2f %.2f %.2f %d\n",NAME, prop.r,prop.g,prop.b, ok);                              \
     ASSIMP_LOG_INFO_F("----- AiMatPropColor3Result -> ", NAME, " ", prop.r, " ", prop.g, " ", prop.b, " ", ok); \
     if (ok) {   \
         out_mat->AddProperty(&prop, 1, key, type, index); \
@@ -72,7 +73,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define GET_AI_MAT_PROP_FLOAT(NAME, prop, key, type, index) \
     float prop = PropertyGet<float>(props, NAME, ok, true); \
-    //printf("PropFloat: %s %.2f %d\n",NAME,prop,ok);                                                        \
+    printf("PropFloat: %s %.2f %d\n",NAME,prop,ok);                                                        \
     ASSIMP_LOG_INFO_F("----- AiMatPropFloatResult -> ", NAME, " ", prop, " ", ok); \
     if (ok) { \
         out_mat->AddProperty(&prop, 1, key, type, index); \
