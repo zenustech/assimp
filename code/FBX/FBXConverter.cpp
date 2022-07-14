@@ -2223,6 +2223,8 @@ namespace Assimp {
             GET_AI_MAT_PROP_COLOR3("Maya|emission", emission, "$ai.emission",0,0)
             GET_AI_MAT_PROP_COLOR3("Maya|opacity", opacity, "$ai.opacity",0,0)
 
+            GET_AI_MAT_PROP_FLOAT("Maya|diffuseRoughness", diffuseRoughness, "$ai.diffuseRoughness",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|specularRoughness", specularRoughness, "$ai.specularRoughness",0,0)
             GET_AI_MAT_PROP_FLOAT("Maya|normalCameraFactor", normalCameraFactor, "$ai.normalCameraFactor",0,0)
             GET_AI_MAT_PROP_FLOAT("Maya|metalness", metalness, "$ai.metalness",0,0)
             GET_AI_MAT_PROP_FLOAT("Maya|thinFilmThickness", thinFilmThickness, "$ai.thinFilmThickness",0,0)
