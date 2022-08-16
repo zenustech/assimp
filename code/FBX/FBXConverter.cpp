@@ -2026,6 +2026,10 @@ namespace Assimp {
             TrySetTextureProperties(out_mat, textures, "Maya|specularRoughness", aiTextureType_DIFFUSE_ROUGHNESS, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|transmissionColor", aiTextureType_OPACITY, mesh);
 
+            // TODO We use some unused texture prop to set up some used texture
+            //  (subsurface-aiTextureType_REFLECTION)
+            TrySetTextureProperties(out_mat, textures, "Maya|subsurfaceColor", aiTextureType_REFLECTION, mesh);
+
             // Maya stingray
             TrySetTextureProperties(out_mat, textures, "Maya|TEX_color_map|file", aiTextureType_BASE_COLOR, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|TEX_normal_map|file", aiTextureType_NORMAL_CAMERA, mesh);
@@ -2228,6 +2232,9 @@ namespace Assimp {
             GET_AI_MAT_PROP_FLOAT("Maya|normalCameraFactor", normalCameraFactor, "$ai.normalCameraFactor",0,0)
             GET_AI_MAT_PROP_FLOAT("Maya|metalness", metalness, "$ai.metalness",0,0)
             GET_AI_MAT_PROP_FLOAT("Maya|thinFilmThickness", thinFilmThickness, "$ai.thinFilmThickness",0,0)
+            {
+                GET_AI_MAT_PROP_FLOAT("Maya|subsurface", subsurface, "$ai.subsurfaceFactor",0,0)
+            }
 
             // ---------------------
 
