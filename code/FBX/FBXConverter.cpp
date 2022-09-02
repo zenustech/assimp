@@ -2022,13 +2022,15 @@ namespace Assimp {
             TrySetTextureProperties(out_mat, textures, "Maya|emissionColor", aiTextureType_EMISSION_COLOR, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|metalness", aiTextureType_METALNESS, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|diffuseRoughness", aiTextureType_DIFFUSE_ROUGHNESS, mesh);
-            // TODO aiTextureType_SPECULAR_ROUGHNESS ?
-            TrySetTextureProperties(out_mat, textures, "Maya|specularRoughness", aiTextureType_DIFFUSE_ROUGHNESS, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|specularRoughness", aiTextureType_HEIGHT, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|transmissionColor", aiTextureType_OPACITY, mesh);
 
             // TODO We use some unused texture prop to set up some used texture
-            //  (subsurface-aiTextureType_REFLECTION)
             TrySetTextureProperties(out_mat, textures, "Maya|subsurfaceColor", aiTextureType_REFLECTION, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|sheenColor", aiTextureType_SHININESS, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|specularColor", aiTextureType_SPECULAR, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|coatColor", aiTextureType_AMBIENT, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|opacity", aiTextureType_LIGHTMAP, mesh);
 
             // Maya stingray
             TrySetTextureProperties(out_mat, textures, "Maya|TEX_color_map|file", aiTextureType_BASE_COLOR, mesh);
@@ -2080,6 +2082,29 @@ namespace Assimp {
             return aiColor3D(BaseColor.x, BaseColor.y, BaseColor.z);
         }
 
+        aiColor3D FBXConverter::GetColorPropertyFactoredMaya2(const PropertyTable& props, const std::string& colorName,
+                                                             const std::string& factorName, bool& result, bool useTemplate)
+        {
+            // factor as Vector3 Situation
+            result = true;
+
+            bool ok;
+
+            aiVector3D BaseColor = aiVector3D(0.0f, 0.0f, 0.0f);
+
+            if (factorName.empty()) {
+                return aiColor3D(BaseColor.x, BaseColor.y, BaseColor.z);;
+            }
+
+            //float factor = PropertyGet<float>(props, factorName, ok, useTemplate);
+            aiVector3D factorColor = PropertyGet<aiVector3D>(props, factorName, ok, useTemplate);
+            if (ok) {
+                ASSIMP_LOG_INFO_F("----- Factoring for -> ", colorName);
+                BaseColor = factorColor;
+            }
+            return aiColor3D(BaseColor.x, BaseColor.y, BaseColor.z);
+        }
+
         aiColor3D FBXConverter::GetColorPropertyFactored(const PropertyTable& props, const std::string& colorName,
             const std::string& factorName, bool& result, bool useTemplate)
         {
@@ -2116,6 +2141,13 @@ namespace Assimp {
         {
           FBXImporter::LogWarn(">>>>> Color Name " + baseName + "Color" + " Factor Name " + baseName);
           return GetColorPropertyFactoredMaya(props, baseName + "Color", baseName, result, true);
+        }
+
+        aiColor3D FBXConverter::GetColorPropertyFromMaterialMaya2(const PropertyTable& props, const std::string& baseName,
+                                                                 bool& result)
+        {
+            FBXImporter::LogWarn(">>>>> Color Name " + baseName + "Color" + " Factor Name " + baseName);
+            return GetColorPropertyFactoredMaya2(props, baseName + "Color", baseName, result, true);
         }
 
         aiColor3D FBXConverter::GetColorProperty(const PropertyTable& props, const std::string& colorName,
@@ -2225,7 +2257,18 @@ namespace Assimp {
             GET_AI_MAT_PROP_COLOR3("Maya|sheen", sheen, "$ai.sheen",0,0)
             GET_AI_MAT_PROP_COLOR3("Maya|coat", coat, "$ai.coat",0,0)
             GET_AI_MAT_PROP_COLOR3("Maya|emission", emission, "$ai.emission",0,0)
-            GET_AI_MAT_PROP_COLOR3("Maya|opacity", opacity, "$ai.opacity",0,0)
+            {
+                //GET_AI_MAT_PROP_COLOR3("Maya|opacity", opacity, "$ai.opacity", 0, 0)
+
+                const aiColor3D &opacity = GetColorPropertyFromMaterialMaya2(props, "Maya|opacity", ok);
+                printf("PropColor: %s %.2f %.2f %.2f %d\n", "Maya|opacity", opacity.r, opacity.g, opacity.b, ok);
+                DefaultLogger::get()->info((Formatter::format("----- AiMatPropColor3Result -> "), "Maya|opacity", " ", opacity.r, " ",
+                                            opacity.g, " ", opacity.b, " ", ok));
+                if (ok) {
+                    out_mat->AddProperty(&opacity, 1, "$ai.opacity", 0, 0);
+                }
+            }
+
 
             GET_AI_MAT_PROP_FLOAT("Maya|diffuseRoughness", diffuseRoughness, "$ai.diffuseRoughness",0,0)
             GET_AI_MAT_PROP_FLOAT("Maya|specularRoughness", specularRoughness, "$ai.specularRoughness",0,0)

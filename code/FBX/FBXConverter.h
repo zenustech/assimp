@@ -286,9 +286,13 @@ private:
         bool& result);
     aiColor3D GetColorPropertyFromMaterialMaya(const PropertyTable& props, const std::string& baseName,
                                          bool& result);
+    aiColor3D GetColorPropertyFromMaterialMaya2(const PropertyTable& props, const std::string& baseName,
+                                               bool& result);
     aiColor3D GetColorPropertyFactored(const PropertyTable& props, const std::string& colorName,
         const std::string& factorName, bool& result, bool useTemplate = true);
     aiColor3D GetColorPropertyFactoredMaya(const PropertyTable& props, const std::string& colorName,
+                                           const std::string& factorName, bool& result, bool useTemplate = true);
+    aiColor3D GetColorPropertyFactoredMaya2(const PropertyTable& props, const std::string& colorName,
                                            const std::string& factorName, bool& result, bool useTemplate = true);
     aiColor3D GetColorProperty(const PropertyTable& props, const std::string& colorName,
         bool& result, bool useTemplate = true);
