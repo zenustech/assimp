@@ -55,10 +55,11 @@ PROJECT( Assimp VERSION 5.0.0 )
 
 # All supported options ###############################################
 
-OPTION( BUILD_SHARED_LIBS
-  "Build package with shared libraries."
-  ON
-)
+#OPTION( BUILD_SHARED_LIBS
+  #"Build package with shared libraries."
+  #ON
+#)
+SET( BUILD_SHARED_LIBS ON)
 
 OPTION( BUILD_FRAMEWORK
   "Build package as Mac OS X Framework bundle."
