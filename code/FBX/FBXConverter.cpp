@@ -2031,6 +2031,7 @@ namespace Assimp {
             TrySetTextureProperties(out_mat, textures, "Maya|specularColor", aiTextureType_SPECULAR, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|coatColor", aiTextureType_AMBIENT, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|opacity", aiTextureType_LIGHTMAP, mesh);
+            TrySetTextureProperties(out_mat, textures, "Maya|id1", aiTextureType_DISPLACEMENT, mesh);
 
             // Maya stingray
             TrySetTextureProperties(out_mat, textures, "Maya|TEX_color_map|file", aiTextureType_BASE_COLOR, mesh);
