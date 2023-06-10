@@ -71,10 +71,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         out_mat->AddProperty(&prop, 1, key, type, index); \
     }
 
+#define GET_AI_MAT_PROP_VECTOR3(NAME, prop, key, type, index)             \
+    const aiColor3D& prop = GetColorPropertyFromMaterialMaya2(props, NAME, ok); \
+    printf("PropVector: %s %.2f %.2f %.2f %d\n",NAME, prop.r,prop.g,prop.b, ok);                              \
+    ASSIMP_LOG_INFO_F("----- AiMatPropVector3Result -> ", NAME, " ", prop.r, " ", prop.g, " ", prop.b, " ", ok); \
+    if (ok) {   \
+        out_mat->AddProperty(&prop, 1, key, type, index); \
+    }
+
 #define GET_AI_MAT_PROP_FLOAT(NAME, prop, key, type, index) \
     float prop = PropertyGet<float>(props, NAME, ok, true); \
     printf("PropFloat: %s %.2f %d\n",NAME,prop,ok);                                                        \
     ASSIMP_LOG_INFO_F("----- AiMatPropFloatResult -> ", NAME, " ", prop, " ", ok); \
+    if (ok) { \
+        out_mat->AddProperty(&prop, 1, key, type, index); \
+    }
+
+#define GET_AI_MAT_PROP_BOOL(NAME, prop, key, type, index) \
+    float prop = PropertyGet<bool>(props, NAME, ok, true); \
+    printf("PropBool: %s %.2f %d\n",NAME,prop,ok);                                                        \
+    ASSIMP_LOG_INFO_F("----- AiMatPropBoolResult -> ", NAME, " ", prop, " ", ok); \
     if (ok) { \
         out_mat->AddProperty(&prop, 1, key, type, index); \
     }

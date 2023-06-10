@@ -2031,7 +2031,6 @@ namespace Assimp {
             TrySetTextureProperties(out_mat, textures, "Maya|specularColor", aiTextureType_SPECULAR, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|coatColor", aiTextureType_AMBIENT, mesh);
             TrySetTextureProperties(out_mat, textures, "Maya|opacity", aiTextureType_LIGHTMAP, mesh);
-            TrySetTextureProperties(out_mat, textures, "Maya|id1", aiTextureType_DISPLACEMENT, mesh);
 
             // Maya stingray
             TrySetTextureProperties(out_mat, textures, "Maya|TEX_color_map|file", aiTextureType_BASE_COLOR, mesh);
@@ -2078,7 +2077,8 @@ namespace Assimp {
             float factor = PropertyGet<float>(props, factorName, ok, useTemplate);
             if (ok) {
                 ASSIMP_LOG_INFO_F("----- Factoring for -> ", colorName);
-                BaseColor *= factor;
+                // We multiply factor by user
+                //BaseColor *= factor;
             }
             return aiColor3D(BaseColor.x, BaseColor.y, BaseColor.z);
         }
@@ -2183,47 +2183,47 @@ namespace Assimp {
                 P: "Maya|aiEnableMatte", "bool", "", "",0
                 P: "Maya|aiMatteColor", "Vector3D", "Vector", "",0,0,0
                 P: "Maya|aiMatteColorA", "float", "", "",0
-                P: "Maya|base", "float", "", "",0.868852
+              * P: "Maya|base", "float", "", "",0.868852
               * P: "Maya|baseColor", "Vector3D", "Vector", "",0,0,0
-                P: "Maya|diffuseRoughness", "float", "", "",0.836066
-                P: "Maya|specular", "float", "", "",0.45082
+              - P: "Maya|diffuseRoughness", "float", "", "",0.836066
+              * P: "Maya|specular", "float", "", "",0.45082
               * P: "Maya|specularColor", "Vector3D", "Vector", "",0,1,0
-                P: "Maya|specularRoughness", "float", "", "",1
-                P: "Maya|specularIOR", "float", "", "",1.264463
-                P: "Maya|specularAnisotropy", "float", "", "",0.491803
-                P: "Maya|specularRotation", "float", "", "",0.758197
-                P: "Maya|metalness", "float", "", "",1
-                P: "Maya|transmission", "float", "", "",0.692623
+              - P: "Maya|specularRoughness", "float", "", "",1
+              - P: "Maya|specularIOR", "float", "", "",1.264463
+              - P: "Maya|specularAnisotropy", "float", "", "",0.491803
+              - P: "Maya|specularRotation", "float", "", "",0.758197
+              - P: "Maya|metalness", "float", "", "",1
+              * P: "Maya|transmission", "float", "", "",0.692623
               * P: "Maya|transmissionColor", "Vector3D", "Vector", "",1,0,0
-                P: "Maya|transmissionDepth", "float", "", "",43.442623
-                P: "Maya|transmissionScatter", "Vector3D", "Vector", "",0,0,1
-                P: "Maya|transmissionScatterAnisotropy", "float", "", "",-0.516393
+              - P: "Maya|transmissionDepth", "float", "", "",43.442623
+              - P: "Maya|transmissionScatter", "Vector3D", "Vector", "",0,0,1
+              - P: "Maya|transmissionScatterAnisotropy", "float", "", "",-0.516393
                 P: "Maya|transmissionDispersion", "float", "", "",37.603306
                 P: "Maya|transmissionExtraRoughness", "float", "", "",0.172131
                 P: "Maya|transmitAovs", "bool", "", "",0
-                P: "Maya|subsurface", "float", "", "",0.360656
+              * P: "Maya|subsurface", "float", "", "",0.360656
               * P: "Maya|subsurfaceColor", "Vector3D", "Vector", "",0,0,1
-                P: "Maya|subsurfaceRadius", "Vector3D", "Vector", "",1,0,1
-                P: "Maya|subsurfaceScale", "float", "", "",3.196721
-                P: "Maya|subsurfaceAnisotropy", "float", "", "",0.606557
+              - P: "Maya|subsurfaceRadius", "Vector3D", "Vector", "",1,0,1
+              - P: "Maya|subsurfaceScale", "float", "", "",3.196721
+              - P: "Maya|subsurfaceAnisotropy", "float", "", "",0.606557
                 P: "Maya|subsurfaceType", "enum", "", "",1
-                P: "Maya|sheen", "float", "", "",0
+              * P: "Maya|sheen", "float", "", "",0
               * P: "Maya|sheenColor", "Vector3D", "Vector", "",1,1,1
-                P: "Maya|sheenRoughness", "float", "", "",0.3
-                P: "Maya|thinWalled", "bool", "", "",0
+              - P: "Maya|sheenRoughness", "float", "", "",0.3
+              - P: "Maya|thinWalled", "bool", "", "",0
                 P: "Maya|tangent", "Vector3D", "Vector", "",0,0,0
-                P: "Maya|coat", "float", "", "",0.606557
+              * P: "Maya|coat", "float", "", "",0.606557
               * P: "Maya|coatColor", "Vector3D", "Vector", "",0,1,1
-                P: "Maya|coatRoughness", "float", "", "",0.348361
-                P: "Maya|coatIOR", "float", "", "",2.830579
-                P: "Maya|coatAnisotropy", "float", "", "",0.79918
-                P: "Maya|coatRotation", "float", "", "",0.25
+              - P: "Maya|coatRoughness", "float", "", "",0.348361
+              - P: "Maya|coatIOR", "float", "", "",2.830579
+              - P: "Maya|coatAnisotropy", "float", "", "",0.79918
+              - P: "Maya|coatRotation", "float", "", "",0.25
                 P: "Maya|coatNormal", "Vector3D", "Vector", "",0,0,0
-                P: "Maya|thinFilmThickness", "float", "", "",909.83606
-                P: "Maya|thinFilmIOR", "float", "", "",0.860656
-                P: "Maya|emission", "float", "", "",0.487705
+              - P: "Maya|thinFilmThickness", "float", "", "",909.83606
+              - P: "Maya|thinFilmIOR", "float", "", "",0.860656
+              * P: "Maya|emission", "float", "", "",0.487705
               * P: "Maya|emissionColor", "Vector3D", "Vector", "",1,1,0
-                P: "Maya|opacity", "Vector3D", "Vector", "",1,1,1
+              * P: "Maya|opacity", "Vector3D", "Vector", "",1,1,1
                 P: "Maya|caustics", "bool", "", "",0
                 P: "Maya|internalReflections", "bool", "", "",1
                 P: "Maya|exitToBackground", "bool", "", "",0
@@ -2258,26 +2258,41 @@ namespace Assimp {
             GET_AI_MAT_PROP_COLOR3("Maya|sheen", sheen, "$ai.sheen",0,0)
             GET_AI_MAT_PROP_COLOR3("Maya|coat", coat, "$ai.coat",0,0)
             GET_AI_MAT_PROP_COLOR3("Maya|emission", emission, "$ai.emission",0,0)
-            {
-                //GET_AI_MAT_PROP_COLOR3("Maya|opacity", opacity, "$ai.opacity", 0, 0)
 
-                const aiColor3D &opacity = GetColorPropertyFromMaterialMaya2(props, "Maya|opacity", ok);
-                printf("PropColor: %s %.2f %.2f %.2f %d\n", "Maya|opacity", opacity.r, opacity.g, opacity.b, ok);
-                DefaultLogger::get()->info((Formatter::format("----- AiMatPropColor3Result -> "), "Maya|opacity", " ", opacity.r, " ",
-                                            opacity.g, " ", opacity.b, " ", ok));
-                if (ok) {
-                    out_mat->AddProperty(&opacity, 1, "$ai.opacity", 0, 0);
-                }
+            {
+                    GET_AI_MAT_PROP_VECTOR3("Maya|opacity", opacity, "$ai.opacity", 0, 0)
+                    GET_AI_MAT_PROP_VECTOR3("Maya|transmissionScatter", transmissionScatter, "$ai.transmissionScatter", 0, 0)
+                    GET_AI_MAT_PROP_VECTOR3("Maya|subsurfaceRadius", subsurfaceRadius, "$ai.subsurfaceRadius", 0, 0)
             }
 
+            GET_AI_MAT_PROP_BOOL("Maya|thinWalled", thinWalled, "$ai.thinWalled",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|coatIOR", coatIOR, "$ai.coatIOR",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|coatRoughness", coatRoughness, "$ai.coatRoughness",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|sheenRoughness", sheenRoughness, "$ai.sheenRoughness",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|transmissionDepth", transmissionDepth, "$ai.transmissionDepth",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|transmissionScatterAnisotropy", transmissionScatterAnisotropy, "$ai.transmissionScatterAnisotropy",0,0)
 
             GET_AI_MAT_PROP_FLOAT("Maya|diffuseRoughness", diffuseRoughness, "$ai.diffuseRoughness",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|specularIOR", specularIOR, "$ai.specularIOR",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|specularAnisotropy", specularAnisotropy, "$ai.specularAnisotropy",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|specularRotation", specularRotation, "$ai.specularRotation",0,0)
             GET_AI_MAT_PROP_FLOAT("Maya|specularRoughness", specularRoughness, "$ai.specularRoughness",0,0)
             GET_AI_MAT_PROP_FLOAT("Maya|normalCameraFactor", normalCameraFactor, "$ai.normalCameraFactor",0,0)
             GET_AI_MAT_PROP_FLOAT("Maya|metalness", metalness, "$ai.metalness",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|coatAnisotropy", coatAnisotropy, "$ai.coatAnisotropy",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|coatRotation", coatRotation, "$ai.coatRotation",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|subsurfaceScale", subsurfaceScale, "$ai.subsurfaceScale",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|subsurfaceAnisotropy", subsurfaceAnisotropy, "$ai.subsurfaceAnisotropy",0,0)
             GET_AI_MAT_PROP_FLOAT("Maya|thinFilmThickness", thinFilmThickness, "$ai.thinFilmThickness",0,0)
+            GET_AI_MAT_PROP_FLOAT("Maya|thinFilmIOR", thinFilmIOR, "$ai.thinFilmIOR",0,0)
             {
+                GET_AI_MAT_PROP_FLOAT("Maya|base", base, "$ai.baseFactor",0,0)
+                GET_AI_MAT_PROP_FLOAT("Maya|specular", specular, "$ai.specularFactor",0,0)
+                GET_AI_MAT_PROP_FLOAT("Maya|transmission", transmission, "$ai.transmissionFactor",0,0)
                 GET_AI_MAT_PROP_FLOAT("Maya|subsurface", subsurface, "$ai.subsurfaceFactor",0,0)
+                GET_AI_MAT_PROP_FLOAT("Maya|sheen", sheen, "$ai.sheenFactor",0,0)
+                GET_AI_MAT_PROP_FLOAT("Maya|coat", coat, "$ai.coatFactor",0,0)
+                GET_AI_MAT_PROP_FLOAT("Maya|emission", emission, "$ai.emissionFactor",0,0)
             }
 
             // ---------------------
